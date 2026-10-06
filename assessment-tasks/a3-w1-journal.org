@@ -1,0 +1,156 @@
+*CP2406*
+
+*Weekly Project Development Journal*
+
+/Reusable for Emotion Smoother, Football Sustained Risk, Galaxy
+Simulation and other approved C++ projects/
+
+\\
+
+*Student name: *Ryan Ericson________________________________________________________
+
+*Student number:
+*14220594________________________________________________________
+
+*Project option:
+*Galaxy Simulation________________________________________________________
+
+*Teaching period:
+*Trimester 3________________________________________________________
+
+| Purpose\\                                                                                                                                                                                                                                                            |
+| Use this journal to show progressive, authentic development of your project. Complete one entry at each required checkpoint. Entries should identify the code you changed, evidence collected, problems solved, tests performed, assistance used and your next step. |
+
+* Submission Instructions
+:PROPERTIES:
+:CUSTOM_ID: submission-instructions
+:END:
+- Complete the journal during development, not only at the end of the
+  assignment.
+- Use specific file, class and function names. For example: main.cpp,
+  EmotionSmoother, risk calculation, simulation update loop or CMake
+  configuration.
+- Include dated evidence from your own project. Suitable evidence may
+  include CLion screenshots, terminal output, test results or saved
+  project versions.
+- Record generative AI use and other assistance honestly. Explain how
+  suggestions were checked, changed or rejected.
+- Submit the completed journal in the format and at the checkpoints
+  specified by your subject coordinator.
+
+* Suggested Checkpoints
+:PROPERTIES:
+:CUSTOM_ID: suggested-checkpoints
+:END:
+| *Entry*          | *Suggested focus*                                                           | *Evidence examples*                                            |
+| 1                | Understand starter project; plan and begin the first core feature.          | Clean build, codebase notes, initial input/output or function. |
+| 2                | Implement and test the main algorithm or simulation behaviour.              | Changed functions, targeted tests, debugging evidence.         |
+| 3                | Integrate features; compare settings or scenarios; refactor and test.       | Comparison output, edge cases, code-quality changes.           |
+| Final reflection | Summarise learning, verification, AI use and readiness to explain the code. | Completed journal, final test summary and submission check.    |
+
+Weekly Journal Entry 1
+*Week / dates: *<2026-10-03 Sat>____________________________________________
+
+*Project Option: *☐ Emotion Smoother ☐ Football Sustained Risk ☐ Galaxy
+Simulation ☐ Other: __________
+
+*Checkpoint / task focus: *____________________________________________
+
+* 1. Goals for This Week
+:PROPERTIES:
+:CUSTOM_ID: goals-for-this-week
+:END:
+*What did you plan to complete? State specific functions, features,
+tests or documentation.*
+
+| \\ |
+| \\ |
+| \\ |
+
+* 2. Development Work Completed
+:PROPERTIES:
+:CUSTOM_ID: development-work-completed
+:END:
+| *File / component* | *Function or area changed* | *Summary of your own changes* |
+|--------------------+----------------------------+-------------------------------|
+| \\                 | \\                         | \\                            |
+| \\                 | \\                         | \\                            |
+| \\                 | \\                         | \\                            |
+| \\                 | \\                         | \\                            |
+
+* 3. Evidence of Progress
+:PROPERTIES:
+:CUSTOM_ID: evidence-of-progress
+:END:
+Attach or insert at least one dated item that shows genuine progress,
+such as a CLion screenshot, program output, test result or
+version-history copy. Do not include private information.
+
+*Evidence filename / link: *____________________________________________
+
+*Explain what the evidence shows and how it relates to this week's
+work.*
+
+| \\ |
+| \\ |
+
+* 4. Problem-Solving Record
+:PROPERTIES:
+:CUSTOM_ID: problem-solving-record
+:END:
+*Describe one problem, error or design decision you encountered.*
+
+| \\ |
+| \\ |
+
+*Explain how you investigated it, what you changed, and why the final
+approach was selected.*
+
+| \\ |
+| \\ |
+
+* 5. Testing Performed
+:PROPERTIES:
+:CUSTOM_ID: testing-performed
+:END:
+| *Test / input* | *Expected result* | *Actual result* | *Pass / fail and action* |
+|----------------+-------------------+-----------------+--------------------------|
+| \\             | \\                | \\              | \\                       |
+| \\             | \\                | \\              | \\                       |
+| \\             | \\                | \\              | \\                       |
+
+* 6. Generative AI and External Help Log
+:PROPERTIES:
+:CUSTOM_ID: generative-ai-and-external-help-log
+:END:
+Record all assistance used this week. If none was used, tick the
+statement below. Do not paste full AI conversations; summarise the
+purpose and your verification.
+
+| *Tool / person* | *Purpose or question* | *Suggestion used or rejected* | *How you checked / changed it* |
+|-----------------+-----------------------+-------------------------------+--------------------------------|
+| \\              | \\                    | \\                            | \\                             |
+| \\              | \\                    | \\                            | \\                             |
+
+☐ No generative AI or external help was used for this week's work.
+
+* 7. Weekly Reflection and Next Step
+:PROPERTIES:
+:CUSTOM_ID: weekly-reflection-and-next-step
+:END:
+*What did you learn, and which part of the work can you confidently
+explain or modify?*
+
+| \\ |
+| \\ |
+
+*What is the next specific task you will complete?*
+
+| \\ |
+| \\ |
+
+*Student declaration: *This entry accurately records my progress and
+assistance received.
+
+*Student initials / signature: *________________________ Date:
+________________________
