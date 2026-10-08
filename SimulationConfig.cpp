@@ -1,8 +1,10 @@
 #include "SimulationConfig.h"
 
+#include <numeric>
 #include <stdexcept>
 #include <string>
 
+// TODO - need to test the new inputs and record the results
 std::string helpText() {
   return "Options: --bodies N --system-size AU --steps N "
          "--dt SECONDS --collision-threshold AU "
@@ -13,8 +15,8 @@ void SimulationConfig::validate() const {
     throw std::invalid_argument("body count must be at least 2");
   }
 
-  if (systemSizeAU <= 0.0 || steps < 0.0) {
-    throw std::invalid_argument("system size must be positive and steps must be positive");
+  if (systemSizeAU <= 0.0) {
+    throw std::invalid_argument("system size must be positive");
   }
 
   if (steps < 1) {
@@ -26,29 +28,48 @@ void SimulationConfig::validate() const {
   }
 
   if (collisionThresholdAU < 0.0) {
-    throw std::invalid_argument("collision threshold cannot be negative");
+    throw std::invalid_argument("collision threshold cannot be negative. Input "
+                                "zero to disable collisions");
+    // threshold of zero disables merging
   }
 }
 
+// helper functions to safely handle missing values, text that is not a number,
+// extra characters, negative numbers, large int numbers
+int convertToInt(const std::string &text, const std::string &optionName) {
+  try {
+    int x = std::stoi(text);
+    return x;
+  } catch (const std::invalid_argument &) {
+    throw std::invalid_argument("invalid value for " + optionName + ": " +
+                                text);
+  } catch (const std::out_of_range &) {
+    throw std::invalid_argument("invalid value for " + optionName + ": " +
+                                text);
+  }
+}
 
-
+// float convertToFloat(const std::string string &text,
+//                      const std::string &optionName) {}
 
 SimulationConfig parseArguments(int argc, char **argv) {
   SimulationConfig config;
 
   for (int argumentIndex = 1; argumentIndex < argc; ++argumentIndex) {
     const std::string argument = argv[argumentIndex];
+    if (argument == "--help") {
+      helpText();
+    }
 
     const auto readValue = [&]() {
       if (argumentIndex + 1 >= argc) {
         throw std::invalid_argument("missing value for " + argument);
       }
-
       return std::string(argv[++argumentIndex]);
     };
 
     if (argument == "--bodies") {
-      config.bodyCount = std::stoull(readValue());
+      config.bodyCount = convertToInt(readValue(), argument);
     } else if (argument == "--system-size") {
       config.systemSizeAU = std::stod(readValue());
     } else if (argument == "--steps") {

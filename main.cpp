@@ -10,80 +10,52 @@
 #include <string>
 #include <vector>
 
-namespace
-{
-void clearOldFrames()
-{
-    std::filesystem::create_directories("images");
+namespace {
+void clearOldFrames() {
+  std::filesystem::create_directories("images");
 
-    for (const auto& entry :
-         std::filesystem::directory_iterator("images"))
-    {
-        const std::string filename =
-            entry.path().filename().string();
+  for (const auto &entry : std::filesystem::directory_iterator("images")) {
+    const std::string filename = entry.path().filename().string();
 
-        if (entry.is_regular_file() &&
-            filename.rfind("frame_", 0) == 0 &&
-            entry.path().extension() == ".ppm")
-        {
-            std::filesystem::remove(entry.path());
-        }
+    if (entry.is_regular_file() && filename.rfind("frame_", 0) == 0 &&
+        entry.path().extension() == ".ppm") {
+      std::filesystem::remove(entry.path());
     }
+  }
 }
 
-bool createVideo()
-{
-    return std::system(
-        "ffmpeg -y -framerate 30 "
-        "-i images/frame_%04d.ppm "
-        "-c:v libx264 -pix_fmt yuv420p galaxy.mp4") == 0;
+bool createVideo() {
+  return std::system("ffmpeg -y -framerate 30 "
+                     "-i images/frame_%04d.ppm "
+                     "-c:v libx264 -pix_fmt yuv420p galaxy.mp4") == 0;
 }
-}
+} // namespace
 
-int main(int argc, char** argv)
-{
-    try
-    {
-        const SimulationConfig config = parseArguments(argc, argv);
-        clearOldFrames();
+int main(int argc, char **argv) {
+  try {
+    const SimulationConfig config = parseArguments(argc, argv);
+    clearOldFrames();
 
-        std::vector<body> bodies = initialiseBodies(config);
-        const ExperimentResult result = runExperiment(
-            bodies,
-            config,
-            "images");
+    std::vector<body> bodies = initialiseBodies(config);
+    const ExperimentResult result = runExperiment(bodies, config, "images");
 
-        writeExperimentCsv(
-            config.outputCsv,
-            "baseline",
-            config,
-            result);
+    writeExperimentCsv(config.outputCsv, "baseline", config, result);
 
-        std::cout
-            << "Created " << config.steps
-            << " frames in images/.\n";
+    std::cout << "Created " << config.steps << " frames in images/.\n";
 
-        if (createVideo())
-        {
-            std::cout << "Created galaxy.mp4\n";
-        }
-        else
-        {
-            std::cerr
-                << "Frames were created, but FFmpeg was not found or failed.\n";
-        }
-
-        std::cout << "Completed baseline run\n";
-        return 0;
+    if (createVideo()) {
+      std::cout << "Created galaxy.mp4\n";
+    } else {
+      std::cerr << "Frames were created, but FFmpeg was not found or failed.\n";
     }
-    catch (const std::runtime_error& error)
-    {
-        std::cout << error.what() << '\n';
-        return 0;
-    }
-    catch (const std::exception& error)
-    {
-        std::cerr << "Error: " << error.what() << '\n';
-        return 1;
-    }
+
+    std::cout << "Completed baseline run\n";
+    return 0;
+  } catch (const std::runtime_error &error) {
+    std::cout << error.what() << '\n';
+    return 0;
+  } catch (const std::exception &error) {
+    std::cerr << "Error: " << error.what() << '\n';
+    return 1;
+  }
 }

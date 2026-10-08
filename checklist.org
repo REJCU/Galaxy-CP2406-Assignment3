@@ -1,0 +1,13 @@
+* Checklist - Galaxy
+
+** Task 1 - Configurable Simulation and Parameter Investigation
+*** SimulationConfig.cpp
+- [ ] commented out CONSTANTS not used
+- [ ] 
+
+- [ ] helper functions to safely handle; - 
+  - [ ] Missing values 
+  - [ ] text that is not a number
+  - [ ] extra characters
+  - [ ] negative numbers
+  - [ ] large int numbers
