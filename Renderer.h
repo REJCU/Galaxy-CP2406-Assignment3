@@ -3,5 +3,6 @@
 #include "Types.h"
 #include <string>
 #include <vector>
-void renderSnapshot(const std::vector<body>& bodies, const std::string& filename, double viewHalfAU);
+void renderSnapshot(const std::vector<body> &bodies,
+                    const std::string &filename, double viewHalfAU);
 #endif
