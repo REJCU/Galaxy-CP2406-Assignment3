@@ -4,11 +4,16 @@
 #include "Simulation.h"
 
 #include <string>
+#include <vector>
 
-void writeExperimentCsv(
-    const std::string& file,
-    const std::string& name,
-    const SimulationConfig& config,
-    const ExperimentResult& result);
+struct ExperimentRecord {
+  std::string name;
+  std::string status;
+  SimulationConfig config;
+  ExperimentResult result;
+};
+
+void writeExperimentCsv(const std::string &file,
+                        const std::vector<ExperimentRecord> &records);
 
 #endif // CSV_REPORTER_H
