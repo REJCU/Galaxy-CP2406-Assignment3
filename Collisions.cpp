@@ -1,7 +1,5 @@
 #include "Collisions.h"
-#include "Simulation.h"
 #include "Types.h"
-#include <iostream>
 #include <random>
 #include <stdexcept>
 
@@ -52,8 +50,7 @@ CollisionStats sampleAndMergeCollisions(std::vector<body> &bodies,
     throw std::invalid_argument("collision threshold cannot be negative");
   }
 
-  CollisionStats statistics;
-  statistics.attemptedPairs = attempts;
+  CollisionStats statistics{};
 
   if (bodies.size() >= 2) {
     std::mt19937 generator(seed);

@@ -45,7 +45,6 @@ Octant makeDynamicRoot(const std::vector<body> &bodies, double marginAU) {
 
   return {centre.x, centre.y, centre.z, span};
 }
-
 void simulateOneStep(std::vector<body> &bodies, const SimulationConfig &config,
                      int step, CollisionStats &accumulatedCollisions) {
   Octant root = makeDynamicRoot(bodies, std::max(1.0, config.systemSizeAU));
