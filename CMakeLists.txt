@@ -6,12 +6,19 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(CMAKE_CXX_EXTENSIONS OFF)
 
 add_executable(Galaxy
-    main.cpp
-        Bhtree.cpp
-        Collisions.cpp
-        CsvReporter.cpp
-        Octant.cpp
-        Renderer.cpp
-        Simulation.cpp
-        SimulationConfig.cpp
+  main.cpp
+  Bhtree.cpp
+  Collisions.cpp
+  CsvReporter.cpp
+  Octant.cpp
+  Renderer.cpp
+  Simulation.cpp
+  SimulationConfig.cpp
 )
+
+add_executable(galaxy_tests
+  CollisionTest.cpp
+  Collisions.cpp
+  SimulationConfig.cpp
+)
+
