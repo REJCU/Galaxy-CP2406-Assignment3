@@ -152,12 +152,43 @@ run 2: attempted 10 valid 1 merged 1 active 1
 ## 7. Refactoring Summary 
 **Question** Which responsibilities were moved out of main.cpp, and how does the new structure make the program easier to test? 
 
-### Simulation responsibilities:
+Each file is singuarly responsible for one job. Any relevant problems that arise it will be easy to trace the problem from the data flow. 
+
+### Simulation responsibilities
+The starter project had already split all functions from main. It contained the initialiseBodies and the runExperiment function. 
+
 ### Renderer responsibilities:
+main.cpp contained the functions of ``clearOldFrames()`` and ``createVideo()``. I refactored them to Renderer.cpp and included the relevant header declaration to make them callable from main(). 
+
+Both functions concerned themselves with the rendering proccess, clearoldframes to delete past runs and createvideo to use the command line functions to create the .ppm files and to port to runnable format.
+
 ### Csv responsibilities: 
+Ensures the creation of a file, it checks if file name matches/exists, if it does not exist, it writes classification names on top and then inserts results. If it does exist, it appends the results to new rows underneath past results.
+
 ### Other Change: 
 
 Code Evidence: 
+
+``
+void clearOldFrames() {
+  std::filesystem::create_directories("images");
+
+  for (const auto &entry : std::filesystem::directory_iterator("images")) {
+    const std::string filename = entry.path().filename().string();
+
+    if (entry.is_regular_file() && filename.rfind("frame_", 0) == 0 &&
+        entry.path().extension() == ".ppm") {
+      std::filesystem::remove(entry.path());
+    }
+  }
+}
+
+
+bool createVideo() {
+  return std::system("ffmpeg -y -framerate 30 "
+                     "-i images/frame_%04d.ppm "
+                     "-c:v libx264 -pix_fmt yuv420p galaxy.mp4") == 0;
+}``
 
 
 ## 8. Test evidence
@@ -172,20 +203,52 @@ run 2: attempted 10 valid 1 merged 1 active 1
 pass attempts limited to 10
 pass same seed same result|
 	
-
-
 ## 9. Challenge and Resolution
 
-### Challenge encourted:
+### Challenge encounted:
+	My test for ``sampleAndMergeCollision`` asked for 10 attempts but reported 20 when run. The loop ran correctly and the other checks passed, including the same seed same result. The program did not crash and ran, so it was a silent failure along the way. 
 
 ### How i investigated it:
- 
+I first checked the test for if it was asking for the correct details. I then grepped for every occurence of ``attemptedpairs``. The loop had ``++statistics.attemptedpairs`` which was the correct behaviour. The problem was the line above that i failed to remove after refactoring which was ``statistics.attemptedpairs = attempts`` which set it to 10 before the loop had started. 
+
 ### Solution Implemented:
+Deleted the leftover line and changed the declaration to ``Collisionstats stats{}`` so the counter starts at zero. 
 
 ### Evidence that the solution works: 
+before - run 1: attempted 20 valid 1 merged 1 active 1
+after - run 1: attempted 10 valid 1 merged 1 active 1
 
 ## AI-use statement
 Tool(s), purpose, and how suggestions were verified:
 
+### Tool
+Claude
+
+### Purpose 
+Understanding the experiment matrix. Not about the implementation but more about the reason behind it. 
+
+### Part of project affected: 
+Main.cpp
+
+### How I checked output? 
+Verfied with online sources, and searched examples of what it meant in other contexts. 
+[wikipedia](https://en.wikipedia.org/wiki/Design_matrix)
 
 
+### Changes I made?
+N/A - it was prior to writing any relevant code. 
+
+### How I demonstrated my understanding? 
+
+Using ``std::vector`` to initialise the different runs inside the helper function inside main.cpp.
+
+# Final Student Declaration
+
+[x]- The explanantions were down in my own words. 
+[x]- The code references relate to my submitted project. 
+[x]- The reported tests were performed on my implementation.
+[x]- I can explain and modify the submitted code. 
+[x]- Any generative AI use has been declared accuarately
+
+Student Name: Ryan Ericson 
+Date: 2/11/26
