@@ -1,7 +1,10 @@
 #include "CsvReporter.h"
 #include "Simulation.h"
 #include "SimulationConfig.h"
+#include "Types.h"
 
+#include <algorithm>
+#include <cstddef>
 #include <cstdlib>
 #include <exception>
 #include <filesystem>
@@ -31,15 +34,49 @@ bool createVideo() {
 }
 } // namespace
 
+struct Run {
+  std::string name;
+  std::size_t bodies;
+  double threshold;
+  int deltaTime;
+};
+
+void runExperiment(const SimulationConfig &baseline) {
+  std::vector<Run> runs = {
+      {"A-disabled", 1024, 0, 1024000},
+      {"A-rare", 1024, 0.1, 1024000},
+      {"A-higher", 1024, 1.0, 1024000},
+      {"A-higher-dt", 1024, 1.0, 2048000},
+      {"B-disabled", 2048, 0, 1024000},
+      {"B-rare", 2048, 0.1, 1024000},
+      {"B-higher", 2048, 1.0, 1024000},
+      {"A-rare-repeat", 1024, 0.1, 1024000},
+      {"A-higher-repeat", 1024, 1.0, 1024000},
+  };
+
+  std::sort(runs.begin(), runs.end(),
+            [](const Run &x, const Run &y) { return x.name < y.name; });
+
+  for (const Run &run : runs) {
+    SimulationConfig config = baseline;
+    config.bodyCount = run.bodies;
+    config.collisionThresholdAU = run.threshold;
+    config.dtSeconds = run.deltaTime;
+
+    std::vector<body> bodies = initialiseBodies(config);
+    const ExperimentResult result = runExperiment(bodies, config, "images");
+    writeExperimentCsv(config.outputCsv, run.name, config, result);
+    std::cout << "Finished " << run.name << '\n';
+  }
+}
+
 int main(int argc, char **argv) {
   try {
     const SimulationConfig config = parseArguments(argc, argv);
     clearOldFrames();
-
-    std::vector<body> bodies = initialiseBodies(config);
-    const ExperimentResult result = runExperiment(bodies, config, "images");
-
-    writeExperimentCsv(config.outputCsv, "baseline", config, result);
+    std::filesystem::remove(config.outputCsv);
+    
+    runExperiment(config);
 
     std::cout << "Created " << config.steps << " frames in images/.\n";
 

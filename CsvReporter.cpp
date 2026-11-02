@@ -3,6 +3,7 @@
 
 #include <fstream>
 #include <iomanip>
+#include <ios>
 
 void writeExperimentCsv(const std::string &file, const std::string &name,
                         const SimulationConfig &config,
@@ -22,7 +23,7 @@ void writeExperimentCsv(const std::string &file, const std::string &name,
            "barycentreX,barycentreY,barycentreZ\n";
   }
 
-  out << std::fixed << std::setprecision(4);
+  out << std::fixed << std::setprecision(7);
 
   out << name << ",ok," << config.bodyCount << "," << config.systemSizeAU << ","
       << config.steps << "," << config.dtSeconds << ","
@@ -30,8 +31,9 @@ void writeExperimentCsv(const std::string &file, const std::string &name,
       << config.seed << "," << result.elapsedMs << ","
       << result.collisions.attemptedPairs << "," << result.collisions.validPairs
       << "," << result.collisions.mergedPairs << "," << result.activeBodies
-      << "," << result.totalMass << "," << result.barycentre.x << ","
-      << result.barycentre.y << "," << result.barycentre.z << "\n";
+      << "," << std::scientific << result.totalMass << ","
+      << result.barycentre.x << "," << result.barycentre.y << ","
+      << result.barycentre.z << "\n";
 
   out.close();
 };

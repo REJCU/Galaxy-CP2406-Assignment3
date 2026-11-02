@@ -82,28 +82,72 @@ Code Evidence:
 	}`
 
 
-
-
-
-
 ## 4. Bounded Sampling  
 **Question** Why must the sampling loop be bounded by attempts rather than successful collisions?
-Responce:
+Responce: 
+If the loop was to be bounded by the number of successful collisions, and collisions are rare or disabled, the loop can run indefinitely waiting for merges that might never happen. Bounding by attempts guarentees the pass always terminates and the collisionStats accuarately reports how many pairs were attempted vs valid vs merged. 
+
 
 ### Code Evidence: 
+``for (std::size_t attempt = 0; attempt < attempts; ++attempt) {
+      ++statistics.attemptedPairs;
+      const std::size_t indexA = pick(generator);
+      const std::size_t indexB = pick(generator);
+      if (indexA == indexB) {
+        continue;
+      }
+      if (bodies[indexA].mass <= 0.0 || bodies[indexB].mass <= 0.0) {
+        continue;
+      }
+      ++statistics.validPairs;
+      if (checkAndMergeCollision(bodies[indexA], bodies[indexB], thresholdAU))
+        ++statistics.mergedPairs;
+}
+``
 
 ## 5. Conservation during Merge 
 **Question** How do the centre-of-mass position and momentum equations preserve physical quantities during a merge? 
 Responce:
+``totalMass = a.mass + b.mass``  is calculated from the original masses before modifiying the either body. Merged position is calculated as a centre of mass (``a.position * a.mass + b.position * b.mass) / totalMass;``) and merged velocity as momentum-weighted velocity (``a.velocity * a.mass + b.velocity * b.mass) / totalMass;``). 
+
+All equations preserve total mass and the total momentum across the merge. Survivor a is updated with the totalmass, mergedposition and mergedvelocity. The second body is retired by setting b.mass = 0.0 and zeroing its velocity so latter passes can ignore it. 
+
 
 ### Code Evidence: 
+``const double totalMass = a.mass + b.mass;
+  if (totalMass <= 0) {
+    throw std::invalid_argument("invalid merge");
+  }
+  vec3 mergedPosition = (a.position * a.mass + b.position * b.mass) / totalMass;
+  vec3 mergedVelocity = (a.velocity * a.mass + b.velocity * b.mass) / totalMass;
+
+  a.mass = totalMass;
+  a.position = mergedPosition;
+  a.velocity = mergedVelocity;
+
+  b.mass = 0.0;
+  b.velocity = vec3{0, 0, 0};
+  ``
 
 ## 6. Seeded random-number generation
 **Question** Why is std::mt19937 with an explicit seed preferable to rand() for these experiments? 
 Responce:
+mt19937 is a deterministic Mersenne Twister generator, so calling it with the same seed and same sequence of calls will produce the same sequence of random numbers of random numbers each run. 
+
+rand() is implementation-defined(RAND_MAX - "guaranteed that this is at least 32767") and offers no guarantee of reproducibility across different compilers and platforms. 
 
 ### Code Evidence: 
+    std::mt19937 generator(seed);
+    std::uniform_int_distribution<std::size_t> pick(0, bodies.size() - 1);
+
+
 ### Evidence from repeated run: 
+``std::vector<body> first = {makeBody(2, 0, 1), makeBody(1, 0.5, -2),
+                             makeBody(0, 0.2, 0)};``
+
+run 1: attempted 10 valid 1 merged 1 active 1
+run 2: attempted 10 valid 1 merged 1 active 1
+
 
 ## 7. Refactoring Summary 
 **Question** Which responsibilities were moved out of main.cpp, and how does the new structure make the program easier to test? 
@@ -115,8 +159,19 @@ Responce:
 
 Code Evidence: 
 
+
 ## 8. Test evidence
 Document at least four focused tests,  including zero or negative parameters, zero collision threshold, exact-threshold distance, retired bodies and deterministic seeded runs.
+
+| zero or negative parameter (dt) | set deltaTime = 0 and checks validates() throw                                                                              | pass zero dt rejected |
+| zero collision threshold        | CheckandMergCollision returns false even when bodies are at same position                                                   |pass zero threshold no merge  |
+| Exact-Threshold distance        | distance == threshold merges correctly, checks mass, position, velocity and retired body                                    |pass exact threshold merge                       |
+| Retired bodies                  | body with mass <= 0 is ignored                                                                                              |pass retired body ignored                       |
+| Deterministic seeded runs       | same seed + same vector gives identical merged pairs, valid pairs and active-bodies. also verifies attempt are capped at 10 |run 1: attempted 10 valid 1 merged 1 active 1
+run 2: attempted 10 valid 1 merged 1 active 1
+pass attempts limited to 10
+pass same seed same result|
+	
 
 
 ## 9. Challenge and Resolution

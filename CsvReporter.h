@@ -11,7 +11,8 @@ struct ExperimentRecord {
   std::string status;
   SimulationConfig config;
   ExperimentResult result;
-}; // can safely delete
+}; // can safely delete - grepped for all instances and returned git commits and
+   // this struct - have to find out it's historical use.
 
 void writeExperimentCsv(const std::string &file, const std::string &name,
                         const SimulationConfig &config,
