@@ -2,9 +2,10 @@
 
 #include "Constants.h"
 
-#include <cstdint>
+#include <filesystem>
+#include <cstdlib>
+#include <string>
 #include <fstream>
-#include <vector>
 
 void renderSnapshot(
     const std::vector<body>& bodies,
@@ -43,3 +44,32 @@ void renderSnapshot(
         reinterpret_cast<const char*>(image.data()),
         static_cast<std::streamsize>(image.size()));
 }
+
+
+void clearOldFrames() {
+  std::filesystem::create_directories("images");
+
+  for (const auto &entry : std::filesystem::directory_iterator("images")) {
+    const std::string filename = entry.path().filename().string();
+
+    if (entry.is_regular_file() && filename.rfind("frame_", 0) == 0 &&
+        entry.path().extension() == ".ppm") {
+      std::filesystem::remove(entry.path());
+    }
+  }
+}
+
+
+bool createVideo() {
+  return std::system("ffmpeg -y -framerate 30 "
+                     "-i images/frame_%04d.ppm "
+                     "-c:v libx264 -pix_fmt yuv420p galaxy.mp4") == 0;
+}
+
+
+
+
+
+
+
+

@@ -2,6 +2,7 @@
 #include "Types.h"
 #include <random>
 #include <stdexcept>
+#include <algorithm>
 
 bool checkAndMergeCollision(body &a, body &b, double thresholdAU) {
   if (thresholdAU < 0) {
@@ -50,14 +51,18 @@ CollisionStats sampleAndMergeCollisions(std::vector<body> &bodies,
     throw std::invalid_argument("collision threshold cannot be negative");
   }
 
-  CollisionStats statistics{};
+  CollisionStats stats{};
+
+  if (bodies.empty()) {
+    return stats;
+      }
 
   if (bodies.size() >= 2) {
     std::mt19937 generator(seed);
     std::uniform_int_distribution<std::size_t> pick(0, bodies.size() - 1);
 
     for (std::size_t attempt = 0; attempt < attempts; ++attempt) {
-      ++statistics.attemptedPairs;
+      ++stats.attemptedPairs;
 
       const std::size_t indexA = pick(generator);
       const std::size_t indexB = pick(generator);
@@ -69,15 +74,16 @@ CollisionStats sampleAndMergeCollisions(std::vector<body> &bodies,
         continue;
       }
 
-      ++statistics.validPairs;
+      ++stats.validPairs;
       if (checkAndMergeCollision(bodies[indexA], bodies[indexB], thresholdAU))
-        ++statistics.mergedPairs;
+        ++stats.mergedPairs;
     }
   }
-  for (const body &currentBody : bodies) {
-    if (currentBody.mass > 0) {
-      ++statistics.activeBodies;
-    }
-  }
-  return statistics;
+
+stats.activeBodies = static_cast<std::size_t>(
+	std::count_if(bodies.begin(), bodies.end(), [](const body& value)
+    {return value.mass;  }));
+ return stats;
 }
+  
+

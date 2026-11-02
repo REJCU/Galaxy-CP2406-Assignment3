@@ -5,4 +5,6 @@
 #include <vector>
 void renderSnapshot(const std::vector<body> &bodies,
                     const std::string &filename, double viewHalfAU);
+void clearOldFrames();
+bool createVideo();
 #endif

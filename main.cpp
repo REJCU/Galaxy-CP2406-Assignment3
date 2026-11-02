@@ -2,37 +2,25 @@
 #include "Simulation.h"
 #include "SimulationConfig.h"
 #include "Types.h"
+#include "Renderer.h"
 
 #include <algorithm>
 #include <cstddef>
 #include <cstdlib>
 #include <exception>
 #include <filesystem>
-#include <iostream>
-#include <stdexcept>
 #include <string>
 #include <vector>
+#include <iostream>
 
-namespace {
-void clearOldFrames() {
-  std::filesystem::create_directories("images");
 
-  for (const auto &entry : std::filesystem::directory_iterator("images")) {
-    const std::string filename = entry.path().filename().string();
+//rendering - clearoldframes
 
-    if (entry.is_regular_file() && filename.rfind("frame_", 0) == 0 &&
-        entry.path().extension() == ".ppm") {
-      std::filesystem::remove(entry.path());
-    }
-  }
-}
+//renderer - createvideo
+// rendering was the main culprit
 
-bool createVideo() {
-  return std::system("ffmpeg -y -framerate 30 "
-                     "-i images/frame_%04d.ppm "
-                     "-c:v libx264 -pix_fmt yuv420p galaxy.mp4") == 0;
-}
-} // namespace
+
+// namespace
 
 struct Run {
   std::string name;
