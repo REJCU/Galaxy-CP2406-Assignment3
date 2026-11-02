@@ -194,15 +194,13 @@ bool createVideo() {
 ## 8. Test evidence
 Document at least four focused tests,  including zero or negative parameters, zero collision threshold, exact-threshold distance, retired bodies and deterministic seeded runs.
 
-| zero or negative parameter (dt) | set deltaTime = 0 and checks validates() throw                                                                              | pass zero dt rejected |
-| zero collision threshold        | CheckandMergCollision returns false even when bodies are at same position                                                   |pass zero threshold no merge  |
-| Exact-Threshold distance        | distance == threshold merges correctly, checks mass, position, velocity and retired body                                    |pass exact threshold merge                       |
-| Retired bodies                  | body with mass <= 0 is ignored                                                                                              |pass retired body ignored                       |
-| Deterministic seeded runs       | same seed + same vector gives identical merged pairs, valid pairs and active-bodies. also verifies attempt are capped at 10 |run 1: attempted 10 valid 1 merged 1 active 1
-run 2: attempted 10 valid 1 merged 1 active 1
-pass attempts limited to 10
-pass same seed same result|
-	
+| zero or negative parameter (dt) | set deltaTime = 0 and checks validates() throw                                           | pass zero dt rejected        |
+| zero collision threshold        | CheckandMergCollision returns false even when bodies are at same position                | pass zero threshold no merge |
+| Exact-Threshold distance        | distance == threshold merges correctly, checks mass, position, velocity and retired body | pass exact threshold merge   |
+| Retired Bodies                  | body with mass <= 0 is ignored                                                           | pass retire bodyignored      |
+| deterministic seed runs         | same seed result in same result                                                          | pass same seed same result   |
+
+
 ## 9. Challenge and Resolution
 
 ### Challenge encounted:
@@ -218,7 +216,7 @@ Deleted the leftover line and changed the declaration to ``Collisionstats stats{
 before - run 1: attempted 20 valid 1 merged 1 active 1
 after - run 1: attempted 10 valid 1 merged 1 active 1
 
-## AI-use statement
+## 10. AI-use statement
 Tool(s), purpose, and how suggestions were verified:
 
 ### Tool
@@ -242,7 +240,7 @@ N/A - it was prior to writing any relevant code.
 
 Using ``std::vector`` to initialise the different runs inside the helper function inside main.cpp.
 
-# Final Student Declaration
+# 11. Final Student Declaration
 
 [x]- The explanantions were down in my own words. 
 [x]- The code references relate to my submitted project. 

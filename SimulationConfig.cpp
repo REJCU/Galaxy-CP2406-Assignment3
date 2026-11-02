@@ -111,7 +111,7 @@ SimulationConfig parseArguments(int argc, char **argv) {
       return std::string(argv[++argumentIndex]);
     };
     if (argument == "--help") {
-      throw helpText();
+      throw std::runtime_error(helpText());
     } else if (argument == "--bodies") {
       config.bodyCount = convertToInt(readValue(), argument);
     } else if (argument == "--system-size") {
